@@ -28,7 +28,6 @@ android {
     }
 }
 
-
 retrolambda {
     jvmArgs '-noverify'
 }
@@ -42,6 +41,9 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    compile "com.google.dagger:dagger:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
 
     testCompile 'junit:junit:4.12'
 }

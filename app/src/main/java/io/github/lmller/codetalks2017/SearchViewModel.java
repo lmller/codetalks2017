@@ -21,7 +21,6 @@ public class SearchViewModel extends BaseObservable {
 	private List<Models.Term> searchResults = Collections.emptyList();
 	private String errorMessage;
 
-
 	public SearchViewModel(Thesaurus synonymSource) {
 		this.synonyms = synonymSource;
 	}
