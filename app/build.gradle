@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: "kotlin-android"
+apply plugin: 'kotlin-kapt'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
@@ -34,6 +36,11 @@ retrolambda {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    kapt "com.android.databinding:compiler:$plugin_version"
+
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
@@ -44,7 +51,7 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
     compile "com.google.dagger:dagger:$dagger_version"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     testCompile 'junit:junit:4.12'
 }
