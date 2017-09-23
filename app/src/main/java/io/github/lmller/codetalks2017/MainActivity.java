@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		App.getInjector().injectInto(this);
 
-
 		ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 		viewModel = new SearchViewModel(thesaurus);
 
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public boolean onQueryTextChange(String text) {
-				searchQueryChangedSubject.onNext(text);
+				searchQueryChangedSubject.onNext(text.trim());
 				return true;
 			}
 		});

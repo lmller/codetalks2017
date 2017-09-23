@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.exceptions.OnErrorNotImplementedException;
 
 
 public class SearchViewModel extends BaseObservable {
@@ -20,9 +19,11 @@ public class SearchViewModel extends BaseObservable {
 	private boolean isLoading;
 	private List<Models.Term> searchResults = Collections.emptyList();
 	private String errorMessage;
+	private String logTag;
 
 	public SearchViewModel(Thesaurus synonymSource) {
 		this.synonyms = synonymSource;
+		this.logTag = synonymSource.name();
 	}
 
 	public Disposable observeTextChanges(Observable<String> queryTextChange, Scheduler scheduler) {
@@ -30,13 +31,19 @@ public class SearchViewModel extends BaseObservable {
 				.filter(text -> !text.isEmpty())
 				.debounce(250, TimeUnit.MILLISECONDS, scheduler)
 				.flatMap(text -> synonyms.findSynonym(text)
+						.doOnError(e -> setErrorMessage(e))
 						.doOnSubscribe(s -> resetState())
 						.doOnTerminate(() -> isLoading = false)
-				).subscribe(
-						result -> handleSearchResult(result),
-						e -> {
-							throw new OnErrorNotImplementedException(e);
-						});
+						.onErrorReturnItem(new Models.Synset())
+				)
+				.subscribe(
+						result -> handleSearchResult(result)
+				);
+	}
+
+	private void setErrorMessage(Throwable e) {
+		errorMessage = logTag + " responded with: " + e.getMessage();
+		notifyPropertyChanged(BR.errorVisible);
 	}
 
 	private void handleSearchResult(Models.Synset result) {
@@ -48,7 +55,8 @@ public class SearchViewModel extends BaseObservable {
 	private void resetState() {
 		searchResults = new ArrayList<>();
 		errorMessage = null;
-		notifyPropertyChanged(io.github.lmller.codetalks2017.BR.errorVisible);
+		notifyPropertyChanged(BR.errorVisible);
+		notifyPropertyChanged(BR.searchResults);
 	}
 
 	@Bindable

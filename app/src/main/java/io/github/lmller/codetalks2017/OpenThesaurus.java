@@ -20,6 +20,11 @@ public class OpenThesaurus implements Thesaurus {
 				.flatMapObservable(synonymList -> Observable.fromIterable(synonymList.synsets));
 	}
 
+	@Override
+	public String name() {
+		return "openthesaurus.org";
+	}
+
 	public interface Api {
 		@GET("synonyme/search?format=application/json")
 		Single<Models.SynonymList> find(@Query("q") String word);

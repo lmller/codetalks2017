@@ -20,16 +20,12 @@ public class Models {
 
 	public static class Synset {
 		public long id;
-		public List<Category> categories = Collections.emptyList();
+		public List<String> categories = Collections.emptyList();
 		public List<Term> terms = Collections.emptyList();
 
 	}
 
 	public static class Term {
 		public String term;
-	}
-
-	public static class Category {
-		public String name;
 	}
 }
