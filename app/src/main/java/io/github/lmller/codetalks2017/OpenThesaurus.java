@@ -15,9 +15,9 @@ public class OpenThesaurus implements Thesaurus {
 	}
 
 	@Override
-	public Observable<Models.Synset> findSynonym(String word) {
+	public Observable<Synset> findSynonym(String word) {
 		return api.find(word)
-				.flatMapObservable(synonymList -> Observable.fromIterable(synonymList.synsets));
+				.flatMapObservable(synonymList -> Observable.fromIterable(synonymList.getSynsets()));
 	}
 
 	@Override
@@ -27,6 +27,6 @@ public class OpenThesaurus implements Thesaurus {
 
 	public interface Api {
 		@GET("synonyme/search?format=application/json")
-		Single<Models.SynonymList> find(@Query("q") String word);
+		Single<SynonymList> find(@Query("q") String word);
 	}
 }

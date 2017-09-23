@@ -17,7 +17,7 @@ public class SearchViewModel extends BaseObservable {
 	private final Thesaurus synonyms;
 
 	private boolean isLoading;
-	private List<Models.Term> searchResults = Collections.emptyList();
+	private List<Term> searchResults = Collections.emptyList();
 	private String errorMessage;
 	private String logTag;
 
@@ -34,7 +34,7 @@ public class SearchViewModel extends BaseObservable {
 						.doOnError(e -> setErrorMessage(e))
 						.doOnSubscribe(s -> resetState())
 						.doOnTerminate(() -> isLoading = false)
-						.onErrorReturnItem(new Models.Synset())
+						.onErrorReturnItem(new Synset())
 				)
 				.subscribe(
 						result -> handleSearchResult(result)
@@ -46,8 +46,8 @@ public class SearchViewModel extends BaseObservable {
 		notifyPropertyChanged(BR.errorVisible);
 	}
 
-	private void handleSearchResult(Models.Synset result) {
-		searchResults = result.terms;
+	private void handleSearchResult(Synset result) {
+		searchResults = result.getTerms();
 
 		notifyChange();
 	}
@@ -61,7 +61,7 @@ public class SearchViewModel extends BaseObservable {
 
 	@Bindable
 	public String getSearchResults() {
-		final List<String> terms = ListUtil.map(searchResults, t -> t.term);
+		final List<String> terms = ListUtil.map(searchResults, t -> t.getTerm());
 		return ListUtil.join(terms, '\n');
 	}
 
