@@ -8,6 +8,7 @@ import android.widget.SearchView;
 import javax.inject.Inject;
 
 import io.github.lmller.codetalks2017.databinding.ActivityMainBinding;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
 	private PublishSubject<String> searchQueryChangedSubject = PublishSubject.create();
 	private SearchViewModel viewModel;
+
+	private Disposable disposable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,12 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
-		viewModel.observeTextChanges(searchQueryChangedSubject, Schedulers.io());
+		disposable = viewModel.observeTextChanges(searchQueryChangedSubject, Schedulers.io());
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		disposable.dispose();
+	}
 }
