@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.SearchView
 import io.github.lmller.codetalks2017.databinding.ActivityMainBinding
 import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
@@ -24,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         App.injector.injectInto(this)
 
         searchViewModel = SearchViewModel(thesaurus).apply {
-            disposable = observeTextChanges(searchQueryChangedSubject, Schedulers.io())
+            disposable = observeTextChanges(searchQueryChangedSubject)
         }
 
         with(DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)) {
